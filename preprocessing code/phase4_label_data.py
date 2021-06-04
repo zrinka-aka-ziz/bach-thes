@@ -62,7 +62,7 @@ def execute(ext1, ext2):
 	#radi li ovo?
 
 	#idxr = random.sample(idx, len(idxv)) #ovo je za zile
-	for i in idxr:
+	for i in idx:
 		shutil.copy(mask_dir + mask_list[i], dst_mask + mask_list[i])
 		shutil.copy(img_dir + img_list[i], dst_img + img_list[i])
 
@@ -72,7 +72,7 @@ def execute(ext1, ext2):
 		shutil.copy(mask_dir + mask_list[i], dst_mask + mask_list[i])
 		shutil.copy(img_dir + img_list[i], dst_img + img_list[i])
 
-	id_total = idxv + idxr
+	id_total = idxv + idx
 	print("Folder {} contains {} images".format(dst_img, len(id_total) ))
 	print("Folder {} contains {} images".format(dst_mask, len(id_total) ))
 	print("Copying complete.")
