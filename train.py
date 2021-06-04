@@ -24,7 +24,7 @@ writer = SummaryWriter()
 #======================= Experiment name setup ============================
 #==========================================================================
 
-experiment = Experiment(api_key="AIzaSyD6ltmd0Tk4potcNpAMgONkUEl1fKYxRck", project_name="bach-thes", workspace="zrinka-aka-ziz")
+experiment = Experiment(api_key="OsOrxAbb9TYm3nyP6QfY6F5QK", project_name="bach-thes", workspace="zrinka-aka-ziz")
 experiment.log_parameters({"seed":config.seed_value, "input size":config.imgsize, "batch size train":config.train_batchsize,"batch size validation":config.valid_batchsize, "no of epochs":config.epochsize, "learning rate":config.lr, "learning rate decay":config.gamma, "learning rate decay step":config.lr_epoch_step, "dropout":config.drop})
 experiment.set_name(config.expname)
 #experiment.add_tags(["whole dataset","no dropout","with scheduler","full images","1,16,32,64,128,256"])
