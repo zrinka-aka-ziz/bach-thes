@@ -61,7 +61,7 @@ def execute(ext1, ext2):
 	#kopiraj slike na kojima nema krvnih zila -> uzima random sliku na kojoj nema krvne zile, ukupan broj mora biti jednak kao broj slika na kojima ima krvnih zila
 	#radi li ovo?
 
-	idxr = random.sample(idx, len(idxv))
+	#idxr = random.sample(idx, len(idxv)) #ovo je za zile
 	for i in idxr:
 		shutil.copy(mask_dir + mask_list[i], dst_mask + mask_list[i])
 		shutil.copy(img_dir + img_list[i], dst_img + img_list[i])
