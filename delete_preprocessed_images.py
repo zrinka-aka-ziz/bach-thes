@@ -14,6 +14,13 @@ folders.append("/content/bach-thes/notebooks/UNet/Train_images/resampled_train_m
 folders.append("/content/bach-thes/notebooks/UNet/Train_images/extracted_train")
 folders.append("/content/bach-thes/notebooks/UNet/Train_images/extracted_train_masks")
 
+folders.append("/content/bach-thes/notebooks/UNet/Train_images/train2")
+folders.append("/content/bach-thes/notebooks/UNet/Train_images/train2_masks")
+folders.append("/content/bach-thes/notebooks/UNet/Train_images/resampled_train2")
+folders.append("/content/bach-thes/notebooks/UNet/Train_images/resampled_train2_masks")
+folders.append("/content/bach-thes/notebooks/UNet/Train_images/extracted_train2")
+folders.append("/content/bach-thes/notebooks/UNet/Train_images/extracted_train2_masks")
+
 folders.append("/content/bach-thes/notebooks/UNet/Validation_images/validation")
 folders.append("/content/bach-thes/notebooks/UNet/Validation_images/validation_masks")
 folders.append("/content/bach-thes/notebooks/UNet/Validation_images/resampled_validation")

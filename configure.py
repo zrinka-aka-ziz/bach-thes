@@ -6,6 +6,7 @@ class Config:
 	#	GOOGLE COLAB
 		self.path_short = "/content/bach-thes/notebooks/UNet/"
 		self.train_orig = self.path_short + "Train_images/train" #train dataset
+		self.train2_orig = self.path_short + "Train_images/train2" #updating train dataset
 		self.valid_orig = self.path_short + "Validation_images/validation" #validation dataset
 		self.test_orig = self.path_short + "Test_images/test" #test dataset
 		self.extension = "model0"
