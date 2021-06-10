@@ -31,9 +31,11 @@ for i in range(0,len(imglist),1):
     with open(os.path.join(config.test_orig + '_masks/' + masklist[i]), 'rb') as f2:
         mask_or = decode_jpeg(f2.read())[:,:,1]
   
-    resized = res1(image=image, mask=mask_or)
-    input_unet = resized['image']
-    mask = resized['mask']
+    ##resized = res1(image=image, mask=mask_or)
+    #input_unet = resized['image']
+    #mask = resized['mask']
+    input_unet = image
+    mask = mask_or
 
     #mask=mask_or
     #input_unet = image #- za full size
