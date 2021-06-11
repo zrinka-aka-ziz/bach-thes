@@ -107,6 +107,7 @@ torch.backends.cudnn.benchmark = False
 #==========================================================================
 #=========================== Initialization ===============================
 #==========================================================================
+epoch=0
 #first dataset before updating
 train_dataset = ImageDataset(config.train_orig) #Training Dataset
 validation_dataset = ImageDataset(config.valid_orig) #Validation Dataset
@@ -165,14 +166,16 @@ if  os.path.exists(config.optimizer) and len(os.listdir(config.optimizer)):
 elif not os.path.exists(config.optimizer):
     os.makedirs(config.optimizer)
 
+
 #==========================================================================
 #================================ TRAIN ===================================
 #==========================================================================
 beg=time.time() #time at the beginning of training
 print("Training Started!")
 with experiment.train():
-  for epoch in range(config.epochsize):
-    print("\nEPOCH " +str(epoch+1)+" of "+str(config.epochsize)+"\n")
+  while epoch <60:
+  #for epoch in range(config.epochsize):
+    print("\nEPOCH " +str(epoch+1))#+" of "+str(config.epochsize)+"\n")
     for i,datapoint_train in enumerate(train_loader):
       image_train = torch.as_tensor(datapoint_train['image']).type(torch.FloatTensor).cuda() #typecasting to FloatTensor as it is compatible with CUDA
       masks_train = torch.as_tensor(datapoint_train['mask']).type(torch.FloatTensor).cuda()
@@ -249,7 +252,10 @@ with experiment.train():
     time_since_beg = (time.time()-beg)/60
     experiment.log_other("time passed (min)", time_since_beg)
     # Print Loss
-    print('Epoch: {}. Loss: {}. Validation Loss: {}. Time(mins) {}'.format(epoch, loss.item(), validation_loss,time_since_beg))
+    print('Epoch: {}. Loss: {}. Validation Loss: {}. Time(mins) {}'.format(epoch+1, loss.item(), validation_loss,time_since_beg))
+    if validation_accuracy >= 0.9:
+            print("Reached validation accuracy, training complete.")
+            print('Epoch reached: {}'.format(epoch+1))
     # update training dataset
     print("Updating training dataset...")
     #delete masks from train2_masks
