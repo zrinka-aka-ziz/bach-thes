@@ -24,6 +24,7 @@ from torch.autograd import Variable
 from simplejpeg import decode_jpeg
 import albumentations as A
 from natsort import natsorted,ns
+import shutil
 import cv2
 
 writer = SummaryWriter()
@@ -113,8 +114,8 @@ validation_dataset = ImageDataset(config.valid_orig) #Validation Dataset
 train_loader = Data.DataLoader(dataset=train_dataset, batch_size=config.train_batchsize, shuffle=True, num_workers= config.num_work, pin_memory=True, drop_last=True)
 validation_loader = Data.DataLoader(dataset=validation_dataset, batch_size=config.valid_batchsize, shuffle=False, num_workers= config.num_work, pin_memory=True, drop_last=True)
 ## things needed for train2
-imglist2 = natsorted(os.listdir(config.train2_orig+'/'), alg=ns.IGNORECASE)
-resi = A.Resize(848,848,interpolation=2, always_apply=True, p=1)
+imglist2 = natsorted(os.listdir(config.train2_orig+'/'), alg=ns.IGNORECASE)#lista slika iz train2
+#resi = A.Resize(848,848,interpolation=2, always_apply=True, p=1)
 
 
 iter = int((config.epochsize * len(train_dataset)) / config.train_batchsize)

@@ -25,6 +25,12 @@ folders.append(test_path)
 test_masks_path = config.test_orig + "_masks"
 folders.append(test_masks_path)
 
+train2_path = config.train2_orig
+folders.append(train2_path)
+
+train2_masks_path = config.train2_orig + "_masks"
+folders.append(train2_masks_path)
+
 
 # path joining version for other paths
 for folder in folders:
