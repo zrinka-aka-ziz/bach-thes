@@ -26,6 +26,7 @@ import albumentations as A
 from natsort import natsorted,ns
 import shutil
 import cv2
+from merging import Merging()
 
 writer = SummaryWriter()
 
@@ -119,7 +120,7 @@ imglist2 = natsorted(os.listdir(config.train2_orig+'/'), alg=ns.IGNORECASE)#list
 #resi = A.Resize(848,848,interpolation=2, always_apply=True, p=1)
 
 
-iter = int((config.epochsize * len(train_dataset)) / config.train_batchsize)
+#iter = int((config.epochsize * len(train_dataset)) / config.train_batchsize) #sta s ovim?
 iteri=0
 iter_new=0 
 
@@ -173,7 +174,7 @@ elif not os.path.exists(config.optimizer):
 beg=time.time() #time at the beginning of training
 print("Training Started!")
 with experiment.train():
-  while epoch <60:
+  while epoch < 60:
   #for epoch in range(config.epochsize):
     print("\nEPOCH " +str(epoch+1))#+" of "+str(config.epochsize)+"\n")
     for i,datapoint_train in enumerate(train_loader):
@@ -252,38 +253,29 @@ with experiment.train():
     time_since_beg = (time.time()-beg)/60
     experiment.log_other("time passed (min)", time_since_beg)
     # Print Loss
-    print('Epoch: {}. Loss: {}. Validation Loss: {}. Time(mins) {}'.format(epoch+1, loss.item(), validation_loss,time_since_beg))
+    print('Epoch: {}. Loss: {}. Validation Loss: {}. Time(mins) {}'.format(epoch, loss.item(), validation_loss,time_since_beg))
     if validation_accuracy >= 0.9:
-            print("Reached validation accuracy, training complete.")
+            print("Reached desired validation accuracy, training complete.")
             print('Epoch reached: {}'.format(epoch+1))
+            break
     # update training dataset
     print("Updating training dataset...")
-    #delete masks from train2_masks
+    Merging() #radi u colabu
     #generate new masks for train2 using model
     #make imglist for train2
-    #train2_dataset = ImageDataset(config.train2_orig) #Training Dataset
-    #train2_loader = Data.DataLoader(dataset=train2_dataset, batch_size=config.train_batchsize, shuffle=True, num_workers= config.num_work, pin_memory=True, drop_last=True)
+    #updated_dataset = ImageDataset("path") #Training Dataset
+    #updated_loader = Data.DataLoader(dataset=updated_dataset, batch_size=config.train_batchsize, shuffle=True, num_workers= config.num_work, pin_memory=True, drop_last=True)
     #for image in imglist make mask
     
-         #uzmi neku masku nije bitno koju, uzima se prva iz test
-    with open(os.path.join(config.test_orig + '_masks/' + masklist[0]), 'rb') as f2:
-        mask_or = decode_jpeg(f2.read())[:,:,1]
-            
-    for w in range(0,len(imglist),1):
-        with open(os.path.join(config.train2_orig + '/' + imglist[w]), 'rb') as f1:
+         
+    for w in range(0,len(imglist2),1):
+        with open(os.path.join(config.train2_orig + '/' + imglist2[w]), 'rb') as f1:
             image = decode_jpeg(f1.read())[:,:,1]
-                #uzmi neku masku nije bitno koju, uzima se prva iz test
-        
-  
-        resized = resi(image=image, mask=mask_or)
-        inp = resized['image']
-        #mask = resized['mask']
-
-    #mask=mask_or
-    #input_unet = image #- za full size
+          #pretvori u input za model
+        inp = image
         inp = np.expand_dims(inp, axis=0)
         inp = np.expand_dims(inp, axis=0)
-        #mask = np.expand_dims(mask, axis=0)
+       
         inp.astype(float)
         inp = inp/ 255.0
         inp = torch.from_numpy(inp)
@@ -294,32 +286,31 @@ with experiment.train():
         #model_unet.eval()
         #model_unet.cuda()
         outp = model(inp)
-        oupt = outp.cpu().data.numpy()
+        outp = outp.cpu().data.numpy()
         outp = outp * 255
         outp = outp.transpose((2, 3, 0, 1))
         outp = outp[:,:,:,0]
     
-    #resized = res2(image=image,mask=out_unet)
-    #out_unet  = resized['mask']
-
+    
         outp[outp <= 127] = 0
         outp[outpt > 127] = 255
 
         outp.astype('uint8') #maska koju se treba dodati u training dataset prije iduce epohe
-        cv2.imwrite(os.path.join(config.train2_orig + "_masks/" + imglist[w]), outp) #sta s ovim
-    #upload masks to train2
-    #copy train2 images to train  and train2 masks to train masks - merged version
-#delete merged and copy train into it, then copy train2 into it
+        cv2.imwrite(os.path.join("/content/bach-thes/notebooks/UNet/Train_images/train_merged_masks/" + "mask_" + imglist[w]), outp) #sta s ovim
+    #upload masks to merged
     
     #make new train loader that contains added masks
-    train_dataset = ImageDataset(config.train_orig) #Training Dataset
-    train_loader = Data.DataLoader(dataset=train_dataset, batch_size=config.train_batchsize, shuffle=True, num_workers= config.num_work, pin_memory=True, drop_last=True)
+    updated_dataset = ImageDataset("/content/bach-thes/notebooks/UNet/Train_images/train_merged") #Training Dataset
+    train_loader = Data.DataLoader(dataset=updated_dataset, batch_size=config.train_batchsize, shuffle=True, num_workers= config.num_work, pin_memory=True, drop_last=True)
+    
     scheduler.step()
     
     if epoch % config.save_model_epoch == 0:
       torch.save(model,config.checkpoints+'/model_ep_'+str(epoch)+'.pt')
       torch.save(optimizer.state_dict(),config.optimizer+'/model_ep_'+str(epoch)+'.pt')
-#      print("model and optimizer saved at epoch : "+str(epoch))      
+#      print("model and optimizer saved at epoch : "+str(epoch))
+
+    epoch+=1 #dont forget
       
 time_since_beg = (time.time()-beg)/60
 experiment.log_parameters({"training time":time_since_beg})

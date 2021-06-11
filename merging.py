@@ -9,7 +9,7 @@ from os.path import basename
 
 def Merging():
 
-    print("Merging train1 and train2 dataset...")
+    
     path_train2 = "/content/bach-thes/notebooks/UNet/Train_images/train2/"
 
     path_src1 = "/content/bach-thes/notebooks/UNet/Train_images/train/"
@@ -33,11 +33,13 @@ def Merging():
     folders.append(dst_mask)
     
     img_list1 = natsorted(os.listdir(path_src1), alg=ns.IGNORECASE)
+    
     mask_list2 = natsorted(os.listdir(path_src2), alg=ns.IGNORECASE)
     img_train2 = natsorted(os.listdir(path_train2), alg=ns.IGNORECASE)
 
     #ocisti merged foldere
     if not first:
+        print("Deleting previous merged datasets...")
         for folder in folders:
             for filename in os.listdir(folder):
                 file_path = os.path.join(folder, filename)
@@ -49,16 +51,22 @@ def Merging():
                 except Exception as e:
                     print('Failed to delete %s. Reason: %s' % (file_path, e))
 	#print("Deleted contents of folder {}".format(folder))
-
+        print("Deleting complete.")
     #kopiraj novo u merged, prvo train1 pa onda tek train2
+    print("Merging train1 and train2 dataset...")
     for file in img_list1:
-        shutil.copy(file, dst_img)
+        file1=path_src1+file
+        shutil.copy(file1, dst_img)
     for file in img_train2:
-        shutil.copy(file, dst_img)
+        file1=path_train2+file
+        shutil.copy(file1, dst_img)
     print("Merging complete.")
         #kopiranje slika
     print("Copying train1 masks...")
         #kopiranje maski
     for file in mask_list2: #kopit+raj train maske
-        shutil.copy(file, dst_mask)
+        file1=path_src2+file
+        shutil.copy(file1, dst_mask)
+        
+        
     print("Copying complete.")
