@@ -21,7 +21,7 @@ def Merging():
     folders = []
     folders.append(dst_img)
     folders.append(dst_mask)
-
+    first = False
     if not os.path.exists(dst_img):
         os.makedirs(dst_img)
         first = True
