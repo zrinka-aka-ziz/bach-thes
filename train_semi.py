@@ -26,7 +26,7 @@ import albumentations as A
 from natsort import natsorted,ns
 import shutil
 import cv2
-from merging import Merging()
+from merging import Merging
 
 writer = SummaryWriter()
 
@@ -35,7 +35,7 @@ writer = SummaryWriter()
 #==========================================================================
 
 experiment = Experiment(api_key="OsOrxAbb9TYm3nyP6QfY6F5QK", project_name="bach-thes", workspace="zrinka-aka-ziz")
-experiment.log_parameters({"seed":config.seed_value, "input size":config.imgsize, "batch size train":config.train_batchsize,"batch size validation":config.valid_batchsize, "no of epochs":config.epochsize, "learning rate":config.lr, "learning rate decay":config.gamma, "learning rate decay step":config.lr_epoch_step, "dropout":config.drop})
+experiment.log_parameters({"seed":config.seed_value, "input size":config.imgsize, "batch size train":config.train_batchsize,"batch size validation":config.valid_batchsize, "learning rate":config.lr, "learning rate decay":config.gamma, "learning rate decay step":config.lr_epoch_step, "dropout":config.drop})
 experiment.set_name(config.expname)
 #experiment.add_tags(["whole dataset","no dropout","with scheduler","full images","1,16,32,64,128,256"])
 
@@ -293,10 +293,10 @@ with experiment.train():
     
     
         outp[outp <= 127] = 0
-        outp[outpt > 127] = 255
+        outp[outp > 127] = 255
 
         outp.astype('uint8') #maska koju se treba dodati u training dataset prije iduce epohe
-        cv2.imwrite(os.path.join("/content/bach-thes/notebooks/UNet/Train_images/train_merged_masks/" + "mask_" + imglist[w]), outp) #sta s ovim
+        cv2.imwrite(os.path.join("/content/bach-thes/notebooks/UNet/Train_images/train_merged_masks/" + "mask_" + imglist2[w]), outp) #sta s ovim
     #upload masks to merged
     
     #make new train loader that contains added masks
@@ -316,4 +316,5 @@ time_since_beg = (time.time()-beg)/60
 experiment.log_parameters({"training time":time_since_beg})
 print('Training time: {}'.format(time_since_beg))
 writer.close()		
+
 
