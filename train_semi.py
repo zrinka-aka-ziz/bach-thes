@@ -302,7 +302,7 @@ with experiment.train():
     #make new train loader that contains added masks
     updated_dataset = ImageDataset("/content/bach-thes/notebooks/UNet/Train_images/train_merged") #Training Dataset
     train_loader = Data.DataLoader(dataset=updated_dataset, batch_size=config.train_batchsize, shuffle=True, num_workers= config.num_work, pin_memory=True, drop_last=True)
-    
+    print("Training dataset updated. Moving onto next epoch.")
     scheduler.step()
     
     if epoch % config.save_model_epoch == 0:
